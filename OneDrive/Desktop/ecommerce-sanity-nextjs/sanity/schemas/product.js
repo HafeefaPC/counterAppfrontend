@@ -6,8 +6,8 @@ export const product = {
     {
       name: 'id',
       title: 'ID',
-      type: 'string',
-      validation: Rule => Rule.required().unique(),
+      type: 'number',
+      
     },
     {
       name: 'title',

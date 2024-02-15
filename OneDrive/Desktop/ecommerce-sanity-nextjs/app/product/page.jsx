@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
+import Navbar from "../../common/navbar";
 import React, { useEffect, useState } from "react";
 import client from "../../sanity/lib/client";
 import { urlForImage } from "../../sanity/lib/image";
@@ -14,6 +15,7 @@ export default function Products() {
   useEffect(() => {
     const groqQuery = `
       *[_type == "product"] {
+        id,
         title,
         description,
         images[],
@@ -43,19 +45,17 @@ export default function Products() {
     }
     return stars;
   };
-  const handleClick = (product) => {
-    productpage(product);
-  };
 
   return (
-    <div className="flex p-4 gap-5">
-      {data.map((product, index) => (
-        <div
-          key={product.id}
-          className="border border-gray-300 rounded-2xl w-1/4 relative"
-        >
-          <Link href={`/product/${product.id}`} key={product.id}>
-            <div className=" gap-4 p-10" onClick={handleClick}>
+    <>
+      <Navbar />
+      <div className="flex p-4 gap-5">
+        {data.map((product) => (
+          <div
+            key={product.id}
+            className="border border-gray-300 rounded-2xl w-1/4 relative"
+          >
+            <div className=" gap-4 p-10">
               {product.images.map((image, index) => (
                 <div key={index}>
                   {index === 0 && (
@@ -81,9 +81,9 @@ export default function Products() {
                 </div>
               </div>
             </div>
-          </Link>
-        </div>
-      ))}
-    </div>
+          </div>
+        ))}
+      </div>
+    </>
   );
 }
