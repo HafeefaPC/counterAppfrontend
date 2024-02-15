@@ -55,32 +55,34 @@ export default function Products() {
             key={product.id}
             className="border border-gray-300 rounded-2xl w-1/4 relative"
           >
-            <div className=" gap-4 p-10">
-              {product.images.map((image, index) => (
-                <div key={index}>
-                  {index === 0 && (
-                    <Image
-                      src={urlForImage(image)}
-                      width={200}
-                      height={200}
-                      alt={`Product Image ${index}`}
-                    />
-                  )}
-                </div>
-              ))}
+            <Link href={`/product/${product.id}`} key={product.id}>
+              <div className=" gap-4 p-10">
+                {product.images.map((image, index) => (
+                  <div key={index}>
+                    {index === 0 && (
+                      <Image
+                        src={urlForImage(image)}
+                        width={200}
+                        height={200}
+                        alt={`Product Image ${index}`}
+                      />
+                    )}
+                  </div>
+                ))}
 
-              <div className="absolute bottom-0 left-0 w-full bg-white p-3">
-                <button className="bg-black text-white p-2 w-full">
-                  Add to Cart
-                </button>
-                <h2 className=" font-bold">{product.title}</h2>
-                {/* <p>{product.description}</p> */}
-                <p className="text-[#FF0000]">₹{product.price}</p>
-                <div className="flex items-center">
-                  {renderRatingStars(product.rating)}
+                <div className="absolute bottom-0 left-0 w-full bg-white p-3">
+                  <button className="bg-black text-white p-2 w-full">
+                    Add to Cart
+                  </button>
+                  <h2 className=" font-bold">{product.title}</h2>
+                  {/* <p>{product.description}</p> */}
+                  <p className="text-[#FF0000]">₹{product.price}</p>
+                  <div className="flex items-center">
+                    {renderRatingStars(product.rating)}
+                  </div>
                 </div>
               </div>
-            </div>
+            </Link>
           </div>
         ))}
       </div>
