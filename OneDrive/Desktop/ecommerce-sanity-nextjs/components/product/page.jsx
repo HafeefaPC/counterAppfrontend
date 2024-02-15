@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { client } from "../../sanity/lib/client";
+import client from "../../sanity/lib/client";
 import { urlForImage } from "../../sanity/lib/image";
 // import Slider from "react-slick";
 // import "slick-carousel/slick/slick.css";
@@ -56,13 +56,18 @@ export default function Products() {
         >
           <Link href={`/product/${product.id}`} key={product.id}>
             <div className=" gap-4 p-10" onClick={handleClick}>
-              <Image
-                src={urlForImage(product.images[0])}
-                width={200}
-                height={200}
-                alt="Product Image"
-                className=""
-              />
+              {product.images.map((image, index) => (
+                <div key={index}>
+                  {index === 0 && (
+                    <Image
+                      src={urlForImage(image)}
+                      width={200}
+                      height={200}
+                      alt={`Product Image ${index}`}
+                    />
+                  )}
+                </div>
+              ))}
 
               <div className="absolute bottom-0 left-0 w-full bg-white p-3">
                 <button className="bg-black text-white p-2 w-full">
