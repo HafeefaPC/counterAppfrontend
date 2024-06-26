@@ -46,17 +46,14 @@ app.post('/processImage', (req, res) => {
             const extractedText = extractTextFromOCRResult(ocrResult);
             // Log extracted text in the terminal
             console.log("Extracted text from image:", extractedText);
-            // Send OCR result back to Flutter app
+            
             res.status(200).send(body);
         }
     });
 });
 
 function extractTextFromOCRResult(ocrResult) {
-    // Extract text from OCR result JSON
-    // Implement your logic here based on the structure of the OCR result
-    // For example, you might need to traverse the JSON object and extract text from specific fields
-    // Once extracted, return the text
+  
     return "Text extracted from OCR result";
 }
 
