@@ -1,19 +1,15 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../data/models/update_limit_model.dart';
 import 'counter_event.dart';
 import 'counter_state.dart';
-import '../../domain/services/set_limit.dart';
-import '../../domain/services/get_limit.dart';
-
+import '../../domain/repositories/counter_repository.dart';
+import '../../data/models/update_limit_model.dart';
 
 class CounterBloc extends Bloc<CounterEvent, CounterState> {
-  final SetLimit setLimit;
-  final GetLimit getLimit;
+  final CounterRepository counterRepository;
 
-  CounterBloc({required this.getLimit, required this.setLimit})
+  CounterBloc({required this.counterRepository})
       : super(CounterInitial(counterValue: 0, limit: 10)) {
-    
-    // Handle Increment
+
     on<Increment>((event, emit) {
       if (state is CounterLoaded) {
         final currentState = state as CounterLoaded;
@@ -25,7 +21,6 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
       }
     });
 
-    // Handle Decrement
     on<Decrement>((event, emit) {
       if (state is CounterLoaded) {
         final currentState = state as CounterLoaded;
@@ -37,11 +32,10 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
       }
     });
 
-    // Handle FetchLimit
     on<FetchLimit>((event, emit) async {
       emit(CounterLoading());
       try {
-        final limitModel = await getLimit(); // Call the getLimit use case
+        final limitModel = await counterRepository.fetchLimit();
         emit(CounterLoaded(counterValue: 0, limit: limitModel.limitValue));
       } catch (e) {
         emit(CounterError("Failed to fetch limit: $e"));
@@ -49,23 +43,21 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
       }
     });
 
-    // Handle UpdateLimit
     on<UpdateLimit>((event, emit) async {
-  if (state is CounterLoaded) {
-    final currentState = state as CounterLoaded;
-    emit(CounterLoading());
-    try {
-      // Assuming setLimit returns a limit model after updating
-      final limitModel = await setLimit(UpdateLimitModel(maxLimit: event.newLimit));
-      emit(CounterLoaded(
-        counterValue: currentState.counterValue,
-        limit: limitModel.limitValue,
-      ));
-    } catch (e) {
-      emit(CounterError("Failed to update limit: $e"));
-      print("Error updating limit: $e");
-    }
-  }
-});
+      if (state is CounterLoaded) {
+        final currentState = state as CounterLoaded;
+        emit(CounterLoading());
+        try {
+          final limitModel = await counterRepository.setLimit(UpdateLimitModel(maxLimit: event.newLimit));
+          emit(CounterLoaded(
+            counterValue: currentState.counterValue,
+            limit: limitModel.limitValue,
+          ));
+        } catch (e) {
+          emit(CounterError("Failed to update limit: $e"));
+          print("Error updating limit: $e");
+        }
+      }
+    });
   }
 }
