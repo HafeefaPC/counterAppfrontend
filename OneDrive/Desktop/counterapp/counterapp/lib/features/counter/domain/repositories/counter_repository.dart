@@ -1,10 +1,11 @@
 import 'dart:convert';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 
 class CounterRepository {
-
-   String baseUrl = dotenv.get("API",fallback:"");
+  final Dio _dio = Dio();
+  final String baseUrl = "http://127.0.0.1:8000";
 
   Future<int> fetchLimit() async {
     try {
